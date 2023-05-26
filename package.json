@@ -1,0 +1,30 @@
+{
+  "name": "walletconnect-session-url",
+  "version": "1.0.0",
+  "description": "Create a session middleware with the given options. Then dapp and wallet can interact together with session without scan qrcode or paste uri.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chendinh/walletconnect-session-url.git"
+  },
+  "keywords": [
+    "walletconnect",
+    "auto",
+    "connection",
+    "url",
+    "session"
+  ],
+  "author": "ChenDinh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chendinh/walletconnect-session-url/issues"
+  },
+  "homepage": "https://github.com/chendinh/walletconnect-session-url#readme",
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "query-string": "^8.1.0"
+  }
+}
