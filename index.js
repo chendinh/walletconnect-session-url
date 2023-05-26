@@ -82,7 +82,7 @@ export const decryptSessionObject = (encodeStringSession, clientMeta, peerMeta, 
 
 
 export const urlWithEncodeSession = (urlDapp, encodeStringSession) => {
-    if (!encodeStringSession || !urlDapp || urlDapp?.length === 0 || encodeStringSession?.length === 0) {
+    if (!encodeStringSession || !urlDapp || (urlDapp && urlDapp.length === 0) || (encodeStringSession && encodeStringSession.length === 0)) {
         return false
     } else {
         const customUrl = encodeURI(`${customUrl}?autoWCKey=${encodeStringSession}`) 
