@@ -8,7 +8,7 @@ const encryptBackupFileContent = (value, pass = DEFAULT_PASSWORD) => {
     return crypto.AES.encrypt(value.toString(), pass.toString()).toString()
   } catch (error) {
     console.log('error encryptBackupFileContent', error)
-    return ''
+    return false
   }
 }
 
@@ -16,8 +16,7 @@ const decryptBackupFileContent = (value, pass = DEFAULT_PASSWORD) => {
     try {
       return crypto.AES.decrypt(value.toString(), pass.toString()).toString(crypto.enc.Utf8)
     } catch (error) {
-      console.log('error decryptBackupFileContent', error)
-      return ''
+      return false
     }
 }
 
@@ -32,13 +31,9 @@ export const encryptSessionObject = (objectSession, addressUser, chainId, peerId
         objSession.address = addressUser
         objSession.chainId = chainId
         objSession.peerId = peerId
-        console.log('objSession', objSession)
-
         const encodeStringSession = encryptBackupFileContent(QueryString.stringify(objSession), password)
         return encodeStringSession
       } catch (e) {
-        console.log('error encryptSessionObject', e)
-
         return false
       }
 }
@@ -58,7 +53,6 @@ export const decryptSessionObject = (encodeStringSession, clientMeta, peerMeta, 
       const decodeURIString = decodeURI(queryKeyString)
       const decodeAutoWCKey = decryptBackupFileContent(decodeURIString, password)
       const objSessionTemp = QueryString.parseUrl(`?${decodeAutoWCKey}`).query
-      console.log('objSessionTemp', objSessionTemp)
 
       return {
         accounts: [objSessionTemp.address],
@@ -91,7 +85,7 @@ export const urlWithEncodeSession = (urlDapp, encodeStringSession) => {
     if (!encodeStringSession || !urlDapp || urlDapp?.length === 0 || encodeStringSession?.length === 0) {
         return false
     } else {
-        customUrl = encodeURI(`${customUrl}?autoWCKey=${encodeStringSession}`) 
+        const customUrl = encodeURI(`${customUrl}?autoWCKey=${encodeStringSession}`) 
         return customUrl
     }
 }
