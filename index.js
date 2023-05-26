@@ -7,6 +7,7 @@ const encryptBackupFileContent = (value, pass = DEFAULT_PASSWORD) => {
   try {
     return crypto.AES.encrypt(value.toString(), pass.toString()).toString()
   } catch (error) {
+    console.log('error encryptBackupFileContent', error)
     return ''
   }
 }
@@ -15,6 +16,7 @@ const decryptBackupFileContent = (value, pass = DEFAULT_PASSWORD) => {
     try {
       return crypto.AES.decrypt(value.toString(), pass.toString()).toString(crypto.enc.Utf8)
     } catch (error) {
+      console.log('error decryptBackupFileContent', error)
       return ''
     }
 }
@@ -24,13 +26,21 @@ export const encryptSessionObject = (objectSession, addressUser, chainId, peerId
       // chainId's type is Number (ex: 1)
       // peerId's type is String (this is clientId of dapp or wallet. if you encode from wallet, your peerId must be clientId of dapp)
       // addressUser's type is String (0x...123)
-      const objSession = objectSession
-      objSession.connected = true
-      objSession.address = addressUser
-      objSession.chainId = chainId
-      objSession.peerId = peerId
-      const encodeStringSession = encryptBackupFileContent(stringify(objSession), password)
-      return encodeStringSession
+      try {
+        const objSession = objectSession
+        objSession.connected = true
+        objSession.address = addressUser
+        objSession.chainId = chainId
+        objSession.peerId = peerId
+        console.log('objSession', objSession)
+
+        const encodeStringSession = encryptBackupFileContent(stringify(objSession), password)
+        return encodeStringSession
+      } catch (e) {
+        console.log('error encryptSessionObject', error)
+
+        return false
+      }
 }
 
 export const decryptSessionObject = (encodeStringSession, clientMeta, peerMeta,  password = DEFAULT_PASSWORD) => {
@@ -48,6 +58,8 @@ export const decryptSessionObject = (encodeStringSession, clientMeta, peerMeta, 
       const decodeURIString = decodeURI(queryKeyString)
       const decodeAutoWCKey = decryptBackupFileContent(decodeURIString, password)
       const objSessionTemp = parseUrl(`?${decodeAutoWCKey}`).query
+      console.log('objSessionTemp', objSessionTemp)
+
       return {
         accounts: [objSessionTemp.address],
         bridge: objSessionTemp.bridge,
@@ -76,7 +88,7 @@ export const decryptSessionObject = (encodeStringSession, clientMeta, peerMeta, 
 
 
 export const urlWithEncodeSession = (urlDapp, encodeStringSession) => {
-    if (!encodeStringSession || !urlDapp || urlDapp?.length > 0 || encodeStringSession?.length > 0) {
+    if (!encodeStringSession || !urlDapp || urlDapp?.length === 0 || encodeStringSession?.length === 0) {
         return false
     } else {
         customUrl = encodeURI(`${customUrl}?autoWCKey=${encodeStringSession}`) 
