@@ -1,4 +1,4 @@
-import { stringify, parseUrl } from 'query-string'
+import QueryString from 'query-string'
 import crypto from 'crypto-js'
 
 const DEFAULT_PASSWORD = 'CHENDINH'
@@ -34,10 +34,10 @@ export const encryptSessionObject = (objectSession, addressUser, chainId, peerId
         objSession.peerId = peerId
         console.log('objSession', objSession)
 
-        const encodeStringSession = encryptBackupFileContent(stringify(objSession), password)
+        const encodeStringSession = encryptBackupFileContent(QueryString.stringify(objSession), password)
         return encodeStringSession
       } catch (e) {
-        console.log('error encryptSessionObject', error)
+        console.log('error encryptSessionObject', e)
 
         return false
       }
@@ -57,7 +57,7 @@ export const decryptSessionObject = (encodeStringSession, clientMeta, peerMeta, 
     } else {
       const decodeURIString = decodeURI(queryKeyString)
       const decodeAutoWCKey = decryptBackupFileContent(decodeURIString, password)
-      const objSessionTemp = parseUrl(`?${decodeAutoWCKey}`).query
+      const objSessionTemp = QueryString.parseUrl(`?${decodeAutoWCKey}`).query
       console.log('objSessionTemp', objSessionTemp)
 
       return {
