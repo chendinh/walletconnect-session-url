@@ -85,7 +85,7 @@ export const urlWithEncodeSession = (urlDapp, encodeStringSession) => {
     if (!encodeStringSession || !urlDapp || (urlDapp && urlDapp.length === 0) || (encodeStringSession && encodeStringSession.length === 0)) {
         return false
     } else {
-        const customUrl = encodeURI(`${customUrl}?autoWCKey=${encodeStringSession}`) 
+        const customUrl = encodeURI(`${urlDapp}?autoWCKey=${encodeStringSession}`) 
         return customUrl
     }
 }
